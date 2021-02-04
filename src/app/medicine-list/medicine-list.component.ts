@@ -4,6 +4,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import * as medicine from '../../assets/medicines.json';
+import { MedicineService } from '../services/medicine.service';
 
 export interface MedicineData {
   id: string;
@@ -28,14 +29,14 @@ export class MedicineListComponent implements AfterViewInit  {
 
   form: FormGroup;
 
-  constructor() {
+  constructor(private medicineService: MedicineService) {
     this.form = new FormGroup({
       id: new FormControl(),
       name: new FormControl(),
       brand_name: new FormControl(),
       price: new FormControl(),
     });
-    
+
     // Create 100 medicine
     this.medicines = Array.from({length: medicine.results.length}, (_, k) => createMedicine(medicine.results[k]));
 
@@ -67,7 +68,11 @@ export class MedicineListComponent implements AfterViewInit  {
       });
     }
   }
-
+  addMedicineToBlockChain() {
+    if (this.form.valid) {
+      this.medicineService.addMedicine(this.form.get("id"), this.form.get("name"), this.form.get("brand_name"), this.form.get("price"));
+    }
+  }
 }
 
 /** Builds and returns a new Medicine. */

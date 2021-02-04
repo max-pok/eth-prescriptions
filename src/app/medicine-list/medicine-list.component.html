@@ -17,11 +17,11 @@
 
     <mat-form-field class="full-width" appearance="outline">
         <mat-label>Price</mat-label>
-        <input matInput formControlName="price" required>
+        <input matInput formControlName="price" type="number">
         <span matSuffix>$</span>
     </mat-form-field>
     <div class="button-row">
-        <button mat-raised-button color="primary" (click)="addMedicine(form)">Add</button>
+        <button mat-raised-button color="primary" (click)="addMedicineToBlockChain()">Add</button>
     </div>
 </form>
 

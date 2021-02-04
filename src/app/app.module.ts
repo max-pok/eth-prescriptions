@@ -20,6 +20,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { PrescriptionRequestListComponent } from './doctor/prescription-request-list/prescription-request-list.component';
 import { GivePrescriptionComponent } from './doctor/give-prescription/give-prescription.component';
+import { MedicineService } from './services/medicine.service';
 
 @NgModule({
   declarations: [
@@ -47,7 +48,8 @@ import { GivePrescriptionComponent } from './doctor/give-prescription/give-presc
     MatFormFieldModule
   ],
   providers: [
-    Web3Service
+    Web3Service,
+    MedicineService
   ],
   bootstrap: [AppComponent]
 })
