@@ -1,9 +1,10 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { Web3Service } from './services/web3.service';
 import { NavComponent } from './nav/nav.component';
 import { DoctorComponent } from './doctor/doctor.component';
@@ -13,7 +14,12 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatInputModule } from '@angular/material/input';
-
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { PrescriptionRequestListComponent } from './doctor/prescription-request-list/prescription-request-list.component';
+import { GivePrescriptionComponent } from './doctor/give-prescription/give-prescription.component';
 
 @NgModule({
   declarations: [
@@ -21,16 +27,24 @@ import { MatInputModule } from '@angular/material/input';
     NavComponent,
     DoctorComponent,
     ClientComponent,
-    MedicineListComponent
+    MedicineListComponent,
+    PrescriptionRequestListComponent,
+    GivePrescriptionComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     BrowserAnimationsModule,
+    FormsModule,
+    ReactiveFormsModule,
     MatTableModule,
     MatPaginatorModule,
-    MatInputModule
+    MatInputModule,
+    MatButtonModule,
+    MatIconModule,
+    MatDividerModule,
+    MatFormFieldModule
   ],
   providers: [
     Web3Service

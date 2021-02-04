@@ -11,3 +11,23 @@ td,
 th {
     width: 25%;
 }
+
+.input-form {
+    min-width: 150px;
+    max-width: 500px;
+    width: 100%;
+}
+
+.full-width {
+    width: 70%;
+}
+
+.button-row {
+    display: table-cell;
+    width: 490px;
+}
+
+.divider {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}

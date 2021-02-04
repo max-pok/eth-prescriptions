@@ -1,4 +1,5 @@
 import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -20,16 +21,26 @@ export class MedicineListComponent implements AfterViewInit  {
 
   displayedColumns: string[] = ['id', 'name', 'brand_name', 'price', 'update'];
   dataSource: MatTableDataSource<MedicineData>;
+  medicines;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor() {    
-    // Create 100 users
-    const medicines = Array.from({length: medicine.results.length}, (_, k) => createMedicine(medicine.results[k]));
+  form: FormGroup;
+
+  constructor() {
+    this.form = new FormGroup({
+      id: new FormControl(),
+      name: new FormControl(),
+      brand_name: new FormControl(),
+      price: new FormControl(),
+    });
+    
+    // Create 100 medicine
+    this.medicines = Array.from({length: medicine.results.length}, (_, k) => createMedicine(medicine.results[k]));
 
     // Assign the data to the data source for the table to render
-    this.dataSource = new MatTableDataSource(medicines);
+    this.dataSource = new MatTableDataSource(this.medicines);
   }
 
   ngAfterViewInit() {
@@ -45,6 +56,18 @@ export class MedicineListComponent implements AfterViewInit  {
       this.dataSource.paginator.firstPage();
     }
   }
+
+  addMedicine(form: FormGroup) {
+    if (form.valid) {      
+      this.medicines.push({
+        id: form.get("id").value,
+        name: form.get("name").value,
+        brand_name: form.get("brand_name").value,
+        price: form.get("price").value,
+      });
+    }
+  }
+
 }
 
 /** Builds and returns a new Medicine. */
