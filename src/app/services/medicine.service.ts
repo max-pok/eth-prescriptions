@@ -1,8 +1,16 @@
-import { Inject, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Web3Service } from './web3.service';
 import * as medicine from '../../../build/contracts/MedicineContract.json';
 import { environment } from 'src/environments/environment';
 import { Contract } from 'web3-eth-contract';
+import { BehaviorSubject, from, Observable } from 'rxjs';
+
+export interface MedicineData {
+  id: string;
+  name: string;
+  brand_name: string;
+  price: number;
+}
 
 @Injectable({
   providedIn: 'root'
@@ -11,30 +19,68 @@ export class MedicineService {
   medicineContract: Contract;
   contractAddress: string;
   abi = [];
-  account;
+  medicineList: MedicineData[] = [];
+  medicineListBehavior = new BehaviorSubject<MedicineData[]>([]);
+  userData : Observable<MedicineData[]>;
+
 
   constructor(private web3Service: Web3Service) { 
     this.abi = medicine.abi;
     this.contractAddress = environment.contract;
-    this.medicineContract = new web3Service.web3.eth.Contract(this.abi, this.contractAddress);
-    console.log(this.medicineContract);
-    
+    this.medicineContract = new this.web3Service.web3.eth.Contract(this.abi, this.contractAddress);
+    this.userData = this.medicineListBehavior.asObservable()
+    this.setMedicines();
   }
 
-  addMedicine(id, medicine_name, brand_name, price) {
-    this.medicineContract.methods.addDrug(id, medicine_name, brand_name, price)
+  addMedicine(id: string, name: string, brand_name: string, price: number) {        
+    this.medicineContract.methods.addDrug(id, name, brand_name, price)
     .send({
-      from: '0xe092b1fa25DF5786D151246E492Eed3d15EA4dAA'
-    }).then(value => {
-      console.log("ok = ", value);
-      this.medicineContract.methods.medicineCount().call().then(answer => {
-        console.log(answer);
-      });
-    }).catch(err => {
+      from: this.web3Service.currentAccount,
+      gasLimit: 3000000,
+      gasPrice: 1
+    })
+    .then(() => {
+      const med: MedicineData = {
+        id ,name, brand_name, price
+      };
+      this.medicineList.push(med);
+      this.medicineListBehavior.next(this.medicineList);
+    })
+    .catch(err => {
       console.error(err);
     });
   }
 
-  getMedicine() {
+  setMedicines() {
+    this.medicineContract.methods.medicineCount().call().then(counter => {
+      for (let i = 0; i < counter; i++) {
+        this.medicineContract.methods.getMedicine(i).call().then((value) => {
+          const med: MedicineData = {
+            id: value[0] ,name: value[1], brand_name: value[2], price: value[3]
+          };
+          this.medicineList.push(med);
+          this.medicineListBehavior.next(this.medicineList);
+        })
+        .catch(err => {
+          console.error(err);
+          return;
+        });
+      }
+    });
+  }
+
+  removeMedicine(index: number) {
+    this.medicineContract.methods.removeDrug(index).send({
+      from: this.web3Service.currentAccount,
+      gasLimit: 3000000,
+      gasPrice: 1
+    })
+    .then(() => {
+      this.medicineList.splice(index, 1);
+      this.medicineListBehavior.next(this.medicineList);
+    })
+    .catch(err => {
+      console.error(err);
+    });
   }
 }

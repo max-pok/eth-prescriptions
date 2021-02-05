@@ -2,26 +2,22 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import Web3 from 'web3';
-import { Contract } from 'web3-eth-contract';
-import * as medicine from '../../../build/contracts/MedicineContract.json';
 
 declare var window: any;
-
 @Injectable({
   providedIn: 'root'
 })
 export class Web3Service {
   public web3: Web3;
   public currentAccount;
-  medicineContract: Contract;
-  contractAddress: string;
-  abi = [];
 
   constructor() {
       this.checkAndInstantiateWeb3();
 
-      this.getAccounts().subscribe(accounts => {
-        this.currentAccount = accounts[0];
+      this.web3.eth.getAccounts((err, acc) => {
+        if (!err && acc.length != 0) {
+          this.currentAccount = acc[0];
+        }
       });
   }
 

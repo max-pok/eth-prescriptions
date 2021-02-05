@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   HttpProvider: "http://localhost:8545",
-  contract: "0x19550457F532A47f8B64e1246563e9013DF20260"
+  contract: "0xd00fDa3a1E6d1Db0931914d46Acc5C414047f44f"
 };
 
 /*

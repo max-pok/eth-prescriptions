@@ -7,12 +7,9 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./nav.component.css']
 })
 export class NavComponent implements OnInit {
-  account: any;
-  constructor(private web3: Web3Service) {    
-    this.web3.getAccounts().subscribe(account => {
-      this.account = account;
-    });
-   }
+
+  constructor(public web3: Web3Service) {
+  }
 
   ngOnInit(): void {
   }

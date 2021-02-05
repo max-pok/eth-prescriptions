@@ -2,6 +2,7 @@ import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { RequestService } from 'src/app/services/request.service';
 
 export interface  PrescriptionRequestData {
   client_id: string;
@@ -25,17 +26,12 @@ export class PrescriptionRequestListComponent implements AfterViewInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor() {
+  constructor(private request: RequestService) {
     // Create 100 medicine
     // this.requests = Array.from({length: medicine.results.length}, (_, k) => createMedicine(medicine.results[k]));
 
     // Assign the data to the data source for the table to render
-    this.dataSource = new MatTableDataSource([{
-      client_id: '1',
-      client_name: '2',
-      medicine_id: '3',
-      medicine_name: '5'
-    }]);
+    this.dataSource = new MatTableDataSource([]);
   }
 
   ngAfterViewInit() {
