@@ -1,16 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Web3Service } from './web3.service';
 import * as medicine from '../../../build/contracts/MedicineContract.json';
+import { MedicineData } from '../models/MedicineData';
 import { environment } from 'src/environments/environment';
 import { Contract } from 'web3-eth-contract';
 import { BehaviorSubject, Observable } from 'rxjs';
-
-export interface MedicineData {
-  id: string;
-  name: string;
-  brand_name: string;
-  price: number;
-}
 
 @Injectable({
   providedIn: 'root'
@@ -82,5 +76,9 @@ export class MedicineService {
     .catch(err => {
       console.error(err);
     });
+  }
+
+  getMedicineName(medicine_id): string {
+    return "temp";
   }
 }

@@ -34,8 +34,8 @@
             <!-- Update Column -->
             <ng-container matColumnDef="update">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header> Accept / Decline</th>
-                <td mat-cell *matCellDef="let row">
-                    <button mat-stroked-button>Accept</button>
+                <td mat-cell *matCellDef="let row; let i = index">
+                    <button mat-stroked-button (click)="accept(i, row)">Accept</button>
                     <button mat-stroked-button color="warn">Decline</button>
                 </td>
             </ng-container>
