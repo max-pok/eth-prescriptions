@@ -17,21 +17,18 @@ export interface  PrescriptionRequestData {
   styleUrls: ['./prescription-request-list.component.css']
 })
 export class PrescriptionRequestListComponent implements AfterViewInit {
-
   
   displayedColumns: string[] = ['client_id', 'client_name', 'medicine_id', 'medicine_name', 'update'];
   dataSource: MatTableDataSource<PrescriptionRequestData>;
-  requests;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
   constructor(private request: RequestService) {
-    // Create 100 medicine
-    // this.requests = Array.from({length: medicine.results.length}, (_, k) => createMedicine(medicine.results[k]));
-
-    // Assign the data to the data source for the table to render
-    this.dataSource = new MatTableDataSource([]);
+    this.request.requestListBehavior.subscribe(requests => {
+      // Assign the data to the data source for the table to render
+      this.dataSource = new MatTableDataSource(requests);
+    })
   }
 
   ngAfterViewInit() {

@@ -3,7 +3,7 @@ import { Web3Service } from './web3.service';
 import * as medicine from '../../../build/contracts/MedicineContract.json';
 import { environment } from 'src/environments/environment';
 import { Contract } from 'web3-eth-contract';
-import { BehaviorSubject, from, Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 export interface MedicineData {
   id: string;
