@@ -14,7 +14,7 @@ export class AuthGuardService implements CanActivate {
     if (this.web3Service.currentAccount === environment.Deployer) {
       return true;
     }
-    this.router.navigate(['/']);
+    this.router.navigate(['/home']);
     return false;
   }
 }

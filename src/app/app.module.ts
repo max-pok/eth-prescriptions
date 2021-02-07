@@ -24,6 +24,7 @@ import { MedicineService } from './services/medicine.service';
 import { RequestService } from './services/request.service';
 import { PrescriptionService } from './services/prescription.service';
 import { RequestPerscriptionComponent } from './client/request-perscription/request-perscription.component';
+import { HomeComponent } from './home/home.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { RequestPerscriptionComponent } from './client/request-perscription/requ
     MedicineListComponent,
     PrescriptionRequestListComponent,
     GivePrescriptionComponent,
-    RequestPerscriptionComponent
+    RequestPerscriptionComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
