@@ -22,6 +22,8 @@ import { PrescriptionRequestListComponent } from './doctor/prescription-request-
 import { GivePrescriptionComponent } from './doctor/give-prescription/give-prescription.component';
 import { MedicineService } from './services/medicine.service';
 import { RequestService } from './services/request.service';
+import { PrescriptionService } from './services/prescription.service';
+import { RequestPerscriptionComponent } from './client/request-perscription/request-perscription.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +33,8 @@ import { RequestService } from './services/request.service';
     ClientComponent,
     MedicineListComponent,
     PrescriptionRequestListComponent,
-    GivePrescriptionComponent
+    GivePrescriptionComponent,
+    RequestPerscriptionComponent
   ],
   imports: [
     BrowserModule,
@@ -51,7 +54,8 @@ import { RequestService } from './services/request.service';
   providers: [
     Web3Service,
     MedicineService,
-    RequestService
+    RequestService,
+    PrescriptionService
   ],
   bootstrap: [AppComponent]
 })

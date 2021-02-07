@@ -11,6 +11,7 @@ contract ClientContract {
 
     struct Perscription {
         string _drug_id;
+        string _drug_name;
         address _client_id;
     }
 
@@ -47,24 +48,28 @@ contract ClientContract {
     function getClient(uint index) public view isDoctor returns(address, string memory) {
         return (clients[index]._client_id, clients[index]._client_name);
     }
-
-    function requestPerscription(address _client_id, string memory _drug_id) public {
-        requests.push(Request(requestCount, Perscription(_drug_id, _client_id)));
+    
+    function getPerscription(uint index) public view returns(address, string memory, string memory) {
+        return (perscriptions[index]._client_id, perscriptions[index]._drug_id, perscriptions[index]._drug_name);
+    }
+    
+    function requestPerscription(address _client_id, string memory _drug_id, string memory _drug_name) public {
+        requests.push(Request(requestCount, Perscription(_drug_id, _drug_name, _client_id)));
         requestCount++;
     }
 
-    function getRequest(uint index) public view isDoctor returns(string memory, address)  {
-        return (requests[index]._perscription._drug_id, requests[index]._perscription._client_id);
+    function getRequest(uint index) public view isDoctor returns(uint, address, string memory, string memory)  {
+        return (requests[index]._request_number, requests[index]._perscription._client_id, requests[index]._perscription._drug_id, requests[index]._perscription._drug_name);
     }
 
-    function givePerscriptionWithIndex(address _client_id, string memory _drug_id, uint _index) public {
-        perscriptions.push(Perscription(_drug_id, _client_id));
+    function givePerscriptionWithIndex(address _client_id, string memory _drug_id, string memory _drug_name, uint _index) public {
+        perscriptions.push(Perscription(_drug_id, _drug_name, _client_id));
         perscriptionCount++;
         removeRequest(_index);
     }
     
-    function givePerscriptionWithoutIndex(address _client_id, string memory _drug_id) public {
-        perscriptions.push(Perscription(_drug_id, _client_id));
+    function givePerscriptionWithoutIndex(address _client_id, string memory _drug_name, string memory _drug_id) public {
+        perscriptions.push(Perscription(_drug_id, _drug_name, _client_id));
         perscriptionCount++;
         removeRequestWithoutIndex(_client_id, _drug_id);
     }

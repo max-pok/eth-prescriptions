@@ -3,15 +3,9 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import * as med from '../../assets/medicines.json';
+import { MedicineData } from '../models/MedicineData';
 import { MedicineService } from '../services/medicine.service';
-
-export interface MedicineData {
-  id: string;
-  name: string;
-  brand_name: string;
-  price: number;
-}
-
 @Component({
   selector: 'medicine-list',
   templateUrl: './medicine-list.component.html',
@@ -39,7 +33,6 @@ export class MedicineListComponent implements AfterViewInit  {
       // Assign the data to the data source for the table to render
       this.dataSource = new MatTableDataSource(values);
     });
-
   }
 
   ngAfterViewInit() {
@@ -56,15 +49,22 @@ export class MedicineListComponent implements AfterViewInit  {
     }
   }
 
-  addMedicineToBlockChain() {    
-    if (this.form.valid) {
-      this.medicineService.addMedicine(this.form.get("id").value, this.form.get("name").value, this.form.get("brand_name").value, Number(this.form.get("price").value));
-      this.form.reset();
-    }
+  addMedicineToBlockChain() {
+    this.addAll();    
+    // if (this.form.valid) {
+    //   this.medicineService.addMedicine(this.form.get("id").value, this.form.get("name").value, this.form.get("brand_name").value, Number(this.form.get("price").value));
+    //   this.form.reset();
+    // }
   }
 
   removeMedicineToBlockChain(index: number) {    
     this.medicineService.removeMedicine(index);
+  }
+
+  addAll() {
+    for (let i = 0; i < 5; i++) {
+      this.medicineService.addMedicine(med.results[i].product_ndc, med.results[i].generic_name, med.results[i].brand_name, Number(med.results[i].product_price));
+    }
   }
 }
 

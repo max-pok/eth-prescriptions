@@ -19,7 +19,7 @@ export class PrescriptionRequestListComponent implements AfterViewInit {
   @ViewChild(MatSort) sort: MatSort;
 
   constructor(private requestService: RequestService) {
-    this.requestService.requestListBehavior.subscribe(requests => {
+    this.requestService.requestListBehavior.subscribe(requests => {      
       // Assign the data to the data source for the table to render
       this.dataSource = new MatTableDataSource(requests);
     })
@@ -40,8 +40,11 @@ export class PrescriptionRequestListComponent implements AfterViewInit {
   }
 
   accept(index: number, row: RequestData) {
-    console.log(index);
-    // this.requestService.acceptRequest(row.client_id, row.medicine_id, index);
-  } 
+    this.requestService.acceptRequest(row.client_id, row.medicine_id, row.medicine_name, index);
+  }
+  
+  decline(index: number) {
+    this.requestService.declineRequest(index);
+  }
 
 }

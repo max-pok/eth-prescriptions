@@ -20,7 +20,7 @@ export class MedicineService {
 
   constructor(private web3Service: Web3Service) { 
     this.abi = medicine.abi;
-    this.contractAddress = environment.contract;
+    this.contractAddress = environment.MedicineContract;
     this.medicineContract = new this.web3Service.web3.eth.Contract(this.abi, this.contractAddress);
     this.userData = this.medicineListBehavior.asObservable()
     this.setMedicines();
@@ -78,7 +78,4 @@ export class MedicineService {
     });
   }
 
-  getMedicineName(medicine_id): string {
-    return "temp";
-  }
 }

@@ -14,11 +14,11 @@ export class Web3Service {
   constructor() {
       this.checkAndInstantiateWeb3();
 
-      this.web3.eth.getAccounts((err, acc) => {
+      this.web3.eth.getAccounts((err, acc) => {                
         if (!err && acc.length != 0) {
           this.currentAccount = acc[0];
         }
-      });
+      }); 
   }
 
   checkAndInstantiateWeb3() {
@@ -42,8 +42,7 @@ export class Web3Service {
 
   getAccounts(): Observable<any> {
   	return new Observable(observer => {
-      this.web3.eth.getAccounts((err, accs) => { 
-               
+      this.web3.eth.getAccounts((err, accs) => {                
   	    if (err != null) {
   	      observer.error('There was an error fetching your accounts.')
   	    }

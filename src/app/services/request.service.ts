@@ -20,7 +20,7 @@ export class RequestService {
   
   constructor(private web3Service: Web3Service, private medicineService: MedicineService) { 
     this.abi = client.abi;
-    this.contractAddress = environment.contract;
+    this.contractAddress = environment.ClientContract;
     this.requestContract = new this.web3Service.web3.eth.Contract(this.abi, this.contractAddress);
     this.userData = this.requestListBehavior.asObservable()
     this.getRequestsFromBlockChain();
@@ -30,6 +30,25 @@ export class RequestService {
     this.requestContract.methods.requestCount().call().then(counter => {
       for (let i = 0; i < counter; i++) {
         this.requestContract.methods.getRequest(i).call().then((value) => {
+          console.log(value);
+          const req: RequestData = {
+            request_number: Number(value[0]), client_id: value[1], medicine_id: value[2], medicine_name: value[3]
+          };
+          this.requestList.push(req);
+          this.requestListBehavior.next(this.requestList);
+        })
+        .catch(err => {
+          console.error(err);
+          return;
+        });
+      }
+    });
+  }
+  
+  getPerscriptionFromBlockChain() {
+    this.requestContract.methods.perscriptionCount().call().then(counter => {
+      for (let i = 0; i < counter; i++) {
+        this.requestContract.methods.getPerscription(i).call().then((value) => {
           const req: RequestData = {
             request_number: Number(value[0]), client_id: value[1], medicine_id: value[2], medicine_name: value[3]
           };
@@ -44,48 +63,50 @@ export class RequestService {
     });
   }
 
-  acceptRequest(client_address, medicine_id ,index: number) {
-    this.requestContract.methods.givePerscriptionWithIndex(client_address, medicine_id, index)
+  acceptRequest(client_address, medicine_id, medicine_name,index: number) {
+    this.requestContract.methods.givePerscriptionWithIndex(client_address, medicine_id, medicine_name, index)
       .send({
         from: this.web3Service.currentAccount,
         gasLimit: 3000000,
         gasPrice: 1
       })
       .then(() => {
-        // TODO: Remove request from request list.
+        this.requestList.splice(index, 1);
+        this.requestListBehavior.next(this.requestList);
+      })
+      .catch(err => {
+        console.error(err);
+      });
+  }
+  
+  declineRequest(index: number) {
+    this.requestContract.methods.removeRequest(index)
+      .send({
+        from: this.web3Service.currentAccount,
+        gasLimit: 3000000,
+        gasPrice: 1
+      })
+      .then(() => {
+        this.requestList.splice(index, 1);
+        this.requestListBehavior.next(this.requestList);
       })
       .catch(err => {
         console.error(err);
       });
   }
 
-  givePerscription(client_id, medicine_id) {
-    this.requestContract.methods.givePerscriptionWithoutIndex(client_id, medicine_id)
-      .send({
-        from: this.web3Service.currentAccount,
-        gasLimit: 3000000,
-        gasPrice: 1
-      })
-      .then(() => {
-        // TODO: if perscription exist in request list => remove it.
-      })
-      .catch(err => {
-        console.error(err);
-    });
-  }
-
-  requestPerscription(client_id, medicine_id) {
-    this.requestContract.methods.requestPerscription(client_id, medicine_id).send({
+  requestPerscription(client_id, medicine_name, medicine_id) {        
+    this.requestContract.methods.requestPerscription(client_id, medicine_id, medicine_name).send({
       from: this.web3Service.currentAccount,
       gasLimit: 3000000,
       gasPrice: 1
     })
     .then(() => {
       const req: RequestData = {
-        request_number: this.requestListBehavior.getValue.length, 
+        request_number: this.requestList.length, 
         client_id: client_id,
         medicine_id: medicine_id,
-        medicine_name: this.medicineService.getMedicineName(medicine_id)
+        medicine_name: medicine_name
       }
       this.requestList.push(req);
       this.requestListBehavior.next(this.requestList);

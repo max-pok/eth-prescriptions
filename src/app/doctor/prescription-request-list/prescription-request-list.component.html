@@ -36,7 +36,7 @@
                 <th mat-header-cell *matHeaderCellDef mat-sort-header> Accept / Decline</th>
                 <td mat-cell *matCellDef="let row; let i = index">
                     <button mat-stroked-button (click)="accept(i, row)">Accept</button>
-                    <button mat-stroked-button color="warn">Decline</button>
+                    <button mat-stroked-button color="warn" (click)="decline(i)">Decline</button>
                 </td>
             </ng-container>
 
