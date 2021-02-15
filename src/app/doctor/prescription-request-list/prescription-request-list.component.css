@@ -11,3 +11,13 @@ td,
 th {
     width: 20%;
 }
+
+.mat-column-request_number {
+  flex: none;
+    width: 100px;
+}
+
+.mat-column-client_id {
+  flex: none;
+    width: 500px;
+}

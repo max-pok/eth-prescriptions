@@ -24,20 +24,25 @@ contract ClientContract {
     Client[] public clients;
     
     uint public requestCount = 0;
-    Request[] requests;
+    Request[] public requests;
     
     uint public perscriptionCount = 0;
-    Perscription[] perscriptions;
+    Perscription[] public perscriptions;
     
-    address owner;
+    address[] private permitted = [address(0xe092b1fa25DF5786D151246E492Eed3d15EA4dAA)];
 
-    modifier isDoctor() {
-        require(msg.sender == owner, "caller is not a doctor");
+    function onlyPermittedDoctor(address sender) public pure returns(bool){
+        if (sender != address(0xe092b1fa25DF5786D151246E492Eed3d15EA4dAA))
+                return false;
+        return true;
+    }
+
+    modifier isDoctor(){
+        require(onlyPermittedDoctor(msg.sender), 'caller is not a doctor');
         _;
     }
 
     constructor() public {
-        owner = msg.sender;
     }
 
     function addClient(address _client_id, string memory _client_name) public {
@@ -58,17 +63,17 @@ contract ClientContract {
         requestCount++;
     }
 
-    function getRequest(uint index) public view isDoctor returns(uint, address, string memory, string memory)  {
+    function getRequest(uint index) public view returns(uint, address, string memory, string memory) {
         return (requests[index]._request_number, requests[index]._perscription._client_id, requests[index]._perscription._drug_id, requests[index]._perscription._drug_name);
     }
 
-    function givePerscriptionWithIndex(address _client_id, string memory _drug_id, string memory _drug_name, uint _index) public {
+    function givePerscriptionWithIndex(address _client_id, string memory _drug_id, string memory _drug_name, uint _index) public isDoctor {
         perscriptions.push(Perscription(_drug_id, _drug_name, _client_id));
         perscriptionCount++;
         removeRequest(_index);
     }
     
-    function givePerscriptionWithoutIndex(address _client_id, string memory _drug_name, string memory _drug_id) public {
+    function givePerscriptionWithoutIndex(address _client_id, string memory _drug_name, string memory _drug_id) public isDoctor {
         perscriptions.push(Perscription(_drug_id, _drug_name, _client_id));
         perscriptionCount++;
         removeRequestWithoutIndex(_client_id, _drug_id);

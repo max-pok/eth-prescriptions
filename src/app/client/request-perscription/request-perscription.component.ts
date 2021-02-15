@@ -41,7 +41,7 @@ export class RequestPerscriptionComponent implements AfterViewInit {
     }
   }
 
-  requestPerscription(row: MedicineData) {
+  requestPerscription(row: MedicineData) {    
     this.requestService.requestPerscription(this.web3Service.currentAccount, row.name, row.id);
   }
 }

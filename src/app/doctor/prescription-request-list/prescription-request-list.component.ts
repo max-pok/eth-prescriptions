@@ -12,7 +12,7 @@ import { RequestService } from 'src/app/services/request.service';
 })
 export class PrescriptionRequestListComponent implements AfterViewInit {
   
-  displayedColumns: string[] = ['client_id', 'client_name', 'medicine_id', 'medicine_name', 'update'];
+  displayedColumns: string[] = ['request_number', 'client_id', 'medicine_id', 'medicine_name', 'update'];
   dataSource: MatTableDataSource<RequestData>;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;

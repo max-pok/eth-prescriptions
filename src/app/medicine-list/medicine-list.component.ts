@@ -9,10 +9,9 @@ import { MedicineService } from '../services/medicine.service';
 @Component({
   selector: 'medicine-list',
   templateUrl: './medicine-list.component.html',
-  styleUrls: ['./medicine-list.component.css']
+  styleUrls: ['./medicine-list.component.css'],
 })
-export class MedicineListComponent implements AfterViewInit  {
-
+export class MedicineListComponent implements AfterViewInit {
   displayedColumns: string[] = ['id', 'name', 'brand_name', 'price', 'update'];
   dataSource: MatTableDataSource<MedicineData>;
 
@@ -28,8 +27,8 @@ export class MedicineListComponent implements AfterViewInit  {
       brand_name: new FormControl(),
       price: new FormControl(),
     });
-    
-    this.medicineService.medicineListBehavior.subscribe(values => {
+
+    this.medicineService.medicineListBehavior.subscribe((values) => {
       // Assign the data to the data source for the table to render
       this.dataSource = new MatTableDataSource(values);
     });
@@ -50,22 +49,29 @@ export class MedicineListComponent implements AfterViewInit  {
   }
 
   addMedicineToBlockChain() {
-    this.addAll();    
-    // if (this.form.valid) {
-    //   this.medicineService.addMedicine(this.form.get("id").value, this.form.get("name").value, this.form.get("brand_name").value, Number(this.form.get("price").value));
-    //   this.form.reset();
-    // }
+    if (this.form.valid) {
+      this.medicineService.addMedicine(
+        this.form.get('id').value,
+        this.form.get('name').value,
+        this.form.get('brand_name').value,
+        Number(this.form.get('price').value)
+      );
+      this.form.reset();
+    }
   }
 
-  removeMedicineToBlockChain(index: number) {    
+  removeMedicineToBlockChain(index: number) {
     this.medicineService.removeMedicine(index);
   }
 
   addAll() {
     for (let i = 0; i < 5; i++) {
-      this.medicineService.addMedicine(med.results[i].product_ndc, med.results[i].generic_name, med.results[i].brand_name, Number(med.results[i].product_price));
+      this.medicineService.addMedicine(
+        med.results[i].product_ndc,
+        med.results[i].generic_name,
+        med.results[i].brand_name,
+        Number(med.results[i].product_price)
+      );
     }
   }
 }
-
-

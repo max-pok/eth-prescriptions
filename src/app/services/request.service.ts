@@ -30,7 +30,6 @@ export class RequestService {
     this.requestContract.methods.requestCount().call().then(counter => {
       for (let i = 0; i < counter; i++) {
         this.requestContract.methods.getRequest(i).call().then((value) => {
-          console.log(value);
           const req: RequestData = {
             request_number: Number(value[0]), client_id: value[1], medicine_id: value[2], medicine_name: value[3]
           };
@@ -44,24 +43,7 @@ export class RequestService {
       }
     });
   }
-  
-  getPerscriptionFromBlockChain() {
-    this.requestContract.methods.perscriptionCount().call().then(counter => {
-      for (let i = 0; i < counter; i++) {
-        this.requestContract.methods.getPerscription(i).call().then((value) => {
-          const req: RequestData = {
-            request_number: Number(value[0]), client_id: value[1], medicine_id: value[2], medicine_name: value[3]
-          };
-          this.requestList.push(req);
-          this.requestListBehavior.next(this.requestList);
-        })
-        .catch(err => {
-          console.error(err);
-          return;
-        });
-      }
-    });
-  }
+
 
   acceptRequest(client_address, medicine_id, medicine_name,index: number) {
     this.requestContract.methods.givePerscriptionWithIndex(client_address, medicine_id, medicine_name, index)
@@ -95,7 +77,7 @@ export class RequestService {
       });
   }
 
-  requestPerscription(client_id, medicine_name, medicine_id) {        
+  requestPerscription(client_id, medicine_name, medicine_id) {     
     this.requestContract.methods.requestPerscription(client_id, medicine_id, medicine_name).send({
       from: this.web3Service.currentAccount,
       gasLimit: 3000000,

@@ -15,13 +15,20 @@ contract MedicineContract {
     uint public medicineCount = 0;
     Medicine[] public medicines;
     
-    modifier isDoctor() {
-        require(msg.sender == owner, "caller is not a doctor");
+    address[] private permitted = [address(0xe092b1fa25DF5786D151246E492Eed3d15EA4dAA)];
+
+    function onlyPermittedDoctor(address sender) public pure returns(bool){
+        if (sender != address(0xe092b1fa25DF5786D151246E492Eed3d15EA4dAA))
+                return false;
+        return true;
+    }
+
+    modifier isDoctor(){
+        require(onlyPermittedDoctor(msg.sender), 'caller is not a doctor');
         _;
     }
     
     constructor() public {
-        owner = msg.sender;
     }
     
     function addDrug(string memory _id, string memory _medicine, string memory _brandName, uint _price) public {
