@@ -11,7 +11,7 @@
             <!-- ID Column -->
             <ng-container matColumnDef="request_number">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header width="20%"> No. </th>
-                <td mat-cell *matCellDef="let row; let i = index"> {{i + 1}} </td>
+                <td mat-cell *matCellDef="let row"> {{row.request_number + 1}} </td>
             </ng-container>
 
             <!-- Progress Column -->
@@ -34,9 +34,9 @@
             <!-- Update Column -->
             <ng-container matColumnDef="update">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header> Accept / Decline</th>
-                <td mat-cell *matCellDef="let row; let i = index">
-                    <button mat-stroked-button (click)="accept(i, row)">Accept</button>
-                    <button mat-stroked-button color="warn" (click)="decline(i)">Decline</button>
+                <td mat-cell *matCellDef="let row">
+                    <button mat-stroked-button (click)="accept(row.request_number, row)">Accept</button>
+                    <button mat-stroked-button color="warn" (click)="decline(row.request_number)">Decline</button>
                 </td>
             </ng-container>
 

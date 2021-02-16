@@ -1,3 +1,4 @@
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Injectable } from '@angular/core';
 import { Web3Service } from './web3.service';
 import * as client from '../../../build/contracts/ClientContract.json';
@@ -19,11 +20,11 @@ export class PrescriptionService {
   perscriptionListtBehavior = new BehaviorSubject<PerscriptionData[]>([]);
   userData: Observable<PerscriptionData[]>;
 
-  constructor(private web3Service: Web3Service) { 
+  constructor(private web3Service: Web3Service, private _snackBar: MatSnackBar) { 
     this.abi = client.abi;
     this.contractAddress = environment.ClientContract;
     this.requestContract = new this.web3Service.web3.eth.Contract(this.abi, this.contractAddress);
-    this.userData = this.perscriptionListtBehavior.asObservable()
+    this.userData = this.perscriptionListtBehavior.asObservable();
     this.getPerscriptionsFromBlockChain();
   }
 
@@ -53,6 +54,11 @@ export class PrescriptionService {
         gasPrice: 1
       })
       .then(() => {
+        // notify user of succsess 
+        this._snackBar.open(`Perscription to ${client_id} of ${medicine_name} sent.`, '', {
+          duration: 3000
+        }); 
+
         const per: PerscriptionData = {
           client_id, medicine_id, medicine_name
         };
@@ -60,7 +66,13 @@ export class PrescriptionService {
         this.perscriptionListtBehavior.next(this.perscriptionList);
       })
       .catch(err => {
+        // notify user of succsess 
+        this._snackBar.open('An error occurred.', '', {
+          duration: 3000
+        }); 
+
         console.error(err);
     });
   }
+  
 }

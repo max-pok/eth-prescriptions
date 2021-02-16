@@ -6,6 +6,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import * as med from '../../assets/medicines.json';
 import { MedicineData } from '../models/MedicineData';
 import { MedicineService } from '../services/medicine.service';
+
 @Component({
   selector: 'medicine-list',
   templateUrl: './medicine-list.component.html',
@@ -56,7 +57,12 @@ export class MedicineListComponent implements AfterViewInit {
         this.form.get('brand_name').value,
         Number(this.form.get('price').value)
       );
+      // clear inputs
       this.form.reset();
+      // reset errors
+      Object.keys(this.form.controls).forEach(key => {
+        this.form.get(key).setErrors(null) ;
+      });
     }
   }
 
@@ -65,7 +71,7 @@ export class MedicineListComponent implements AfterViewInit {
   }
 
   addAll() {
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 17; i++) {
       this.medicineService.addMedicine(
         med.results[i].product_ndc,
         med.results[i].generic_name,

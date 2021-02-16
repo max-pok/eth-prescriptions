@@ -1,5 +1,6 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
+import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { PerscriptionData } from '../models/PerscriptionData';
@@ -19,12 +20,12 @@ export class ClientComponent implements AfterViewInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private perscriptionService: PrescriptionService, private web3: Web3Service) { 
-    this.perscriptionService.perscriptionListtBehavior.subscribe(value => {  
-      let v = value.filter((v) => {
-        return this.web3.currentAccount == v.client_id;
-      });          
-      this.dataSource = new MatTableDataSource(v);     
+  constructor(private perscriptionService: PrescriptionService, private web3: Web3Service) {
+    this.perscriptionService.perscriptionListtBehavior.subscribe(value => {
+      const filtered = value.filter(v => {
+        return this.web3.currentAccount === v.client_id;
+      });
+      this.dataSource = new MatTableDataSource(filtered);
     });
   }
 

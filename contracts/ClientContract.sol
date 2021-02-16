@@ -24,7 +24,8 @@ contract ClientContract {
     Client[] public clients;
     
     uint public requestCount = 0;
-    Request[] public requests;
+    Request[] requests;
+    
     
     uint public perscriptionCount = 0;
     Perscription[] public perscriptions;
@@ -43,6 +44,7 @@ contract ClientContract {
     }
 
     constructor() public {
+        
     }
 
     function addClient(address _client_id, string memory _client_name) public {
@@ -63,30 +65,30 @@ contract ClientContract {
         requestCount++;
     }
 
-    function getRequest(uint index) public view returns(uint, address, string memory, string memory) {
+    function getRequest(uint index) public view returns(uint, address, string memory, string memory)  {
         return (requests[index]._request_number, requests[index]._perscription._client_id, requests[index]._perscription._drug_id, requests[index]._perscription._drug_name);
     }
 
-    function givePerscriptionWithIndex(address _client_id, string memory _drug_id, string memory _drug_name, uint _index) public isDoctor {
+    function givePerscriptionWithIndex(address _client_id, string memory _drug_id, string memory _drug_name, uint _index) public {
         perscriptions.push(Perscription(_drug_id, _drug_name, _client_id));
         perscriptionCount++;
         removeRequest(_index);
     }
     
-    function givePerscriptionWithoutIndex(address _client_id, string memory _drug_name, string memory _drug_id) public isDoctor {
+    function givePerscriptionWithoutIndex(address _client_id, string memory _drug_name, string memory _drug_id) public {
         perscriptions.push(Perscription(_drug_id, _drug_name, _client_id));
         perscriptionCount++;
         removeRequestWithoutIndex(_client_id, _drug_id);
     }
     
     function removeRequest(uint index) public isDoctor {
-        if (index >= requestCount) return;
+        if (index >= requestCount) revert('bad index');
         
         for (uint i = index; i < requestCount-1; i++){
             requests[i] = requests[i+1];
             requests[i]._request_number--;
         }
-        delete(requests[requests.length-1]);
+        requests.pop();
         requestCount--;
     }
     

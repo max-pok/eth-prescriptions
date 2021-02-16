@@ -18,6 +18,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { PrescriptionRequestListComponent } from './doctor/prescription-request-list/prescription-request-list.component';
 import { GivePrescriptionComponent } from './doctor/give-prescription/give-prescription.component';
 import { MedicineService } from './services/medicine.service';
@@ -25,6 +26,7 @@ import { RequestService } from './services/request.service';
 import { PrescriptionService } from './services/prescription.service';
 import { RequestPerscriptionComponent } from './client/request-perscription/request-perscription.component';
 import { HomeComponent } from './home/home.component';
+import { MatCardModule } from '@angular/material/card';
 
 @NgModule({
   declarations: [
@@ -51,7 +53,9 @@ import { HomeComponent } from './home/home.component';
     MatButtonModule,
     MatIconModule,
     MatDividerModule,
-    MatFormFieldModule
+    MatFormFieldModule,
+    MatSnackBarModule,
+    MatCardModule
   ],
   providers: [
     Web3Service,

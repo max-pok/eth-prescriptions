@@ -42,12 +42,11 @@ contract MedicineContract {
         for (uint i = index; i < medicines.length-1; i++){
             medicines[i] = medicines[i+1];
         }
-        delete(medicines[medicines.length-1]);
+        medicines.pop();
         medicineCount--;
     }
 
     function getMedicine(uint index) public view returns(string memory, string memory, string memory, uint) {
-        // if (index >= medicineCount) return ("","", "", 0);
         return (medicines[index]._id, medicines[index]._drugName, medicines[index]._brandName, medicines[index]._price);
     }
 }

@@ -1,6 +1,6 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { MedicineData } from 'src/app/models/MedicineData';
@@ -20,7 +20,9 @@ export class RequestPerscriptionComponent implements AfterViewInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private medicineService: MedicineService, private requestService: RequestService, private web3Service: Web3Service) { 
+  constructor(private medicineService: MedicineService, private requestService: RequestService,
+              private web3Service: Web3Service, private snackBar: MatSnackBar) {
+
     this.medicineService.medicineListBehavior.subscribe(values => {
       // Assign the data to the data source for the table to render
       this.dataSource = new MatTableDataSource(values);
@@ -41,7 +43,7 @@ export class RequestPerscriptionComponent implements AfterViewInit {
     }
   }
 
-  requestPerscription(row: MedicineData) {    
+  requestPerscription(row: MedicineData) {
     this.requestService.requestPerscription(this.web3Service.currentAccount, row.name, row.id);
   }
 }

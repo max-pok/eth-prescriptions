@@ -6,6 +6,7 @@ import { RequestData } from '../models/RequestData';
 import { environment } from 'src/environments/environment';
 import { Contract } from 'web3-eth-contract';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Injectable({
   providedIn: 'root'
@@ -18,18 +19,20 @@ export class RequestService {
   requestListBehavior = new BehaviorSubject<RequestData[]>([]);
   userData: Observable<RequestData[]>;
   
-  constructor(private web3Service: Web3Service, private medicineService: MedicineService) { 
+  constructor(private web3Service: Web3Service, private _snackBar: MatSnackBar) { 
     this.abi = client.abi;
     this.contractAddress = environment.ClientContract;
     this.requestContract = new this.web3Service.web3.eth.Contract(this.abi, this.contractAddress);
-    this.userData = this.requestListBehavior.asObservable()
+    this.userData = this.requestListBehavior.asObservable();
     this.getRequestsFromBlockChain();
   }
 
   getRequestsFromBlockChain() {
     this.requestContract.methods.requestCount().call().then(counter => {
       for (let i = 0; i < counter; i++) {
-        this.requestContract.methods.getRequest(i).call().then((value) => {
+        this.requestContract.methods.getRequest(i).call().then((value) => {  
+          console.log(value);
+          
           const req: RequestData = {
             request_number: Number(value[0]), client_id: value[1], medicine_id: value[2], medicine_name: value[3]
           };
@@ -45,7 +48,7 @@ export class RequestService {
   }
 
 
-  acceptRequest(client_address, medicine_id, medicine_name,index: number) {
+  acceptRequest(client_address, medicine_id, medicine_name, index: number) {
     this.requestContract.methods.givePerscriptionWithIndex(client_address, medicine_id, medicine_name, index)
       .send({
         from: this.web3Service.currentAccount,
@@ -53,14 +56,24 @@ export class RequestService {
         gasPrice: 1
       })
       .then(() => {
+        // notify user of succsess 
+        this._snackBar.open(`Request #${index + 1} accepted.`, '', {
+          duration: 3000
+        }); 
+
         this.requestList.splice(index, 1);
         this.requestListBehavior.next(this.requestList);
       })
       .catch(err => {
+        // notify user of succsess 
+        this._snackBar.open('An error occurred', '', {
+          duration: 3000
+        }); 
+
         console.error(err);
       });
   }
-  
+
   declineRequest(index: number) {
     this.requestContract.methods.removeRequest(index)
       .send({
@@ -69,33 +82,57 @@ export class RequestService {
         gasPrice: 1
       })
       .then(() => {
+        // notify user of succsess 
+        this._snackBar.open(`Request #${index + 1} denied.`, '', {
+          duration: 3000
+        }); 
+
         this.requestList.splice(index, 1);
         this.requestListBehavior.next(this.requestList);
       })
       .catch(err => {
+        // notify user of succsess 
+        this._snackBar.open('An error occurred.', '', {
+          duration: 3000
+        }); 
+
         console.error(err);
       });
   }
 
-  requestPerscription(client_id, medicine_name, medicine_id) {     
+  requestPerscription(client_id, medicine_name, medicine_id) {   
+    console.log(client_id);
+    console.log(medicine_name);
+    console.log(medicine_id);
+    
     this.requestContract.methods.requestPerscription(client_id, medicine_id, medicine_name).send({
-      from: this.web3Service.currentAccount,
+      from: client_id,
       gasLimit: 3000000,
       gasPrice: 1
     })
-    .then(() => {
-      const req: RequestData = {
-        request_number: this.requestList.length, 
-        client_id: client_id,
-        medicine_id: medicine_id,
-        medicine_name: medicine_name
-      }
-      this.requestList.push(req);
-      this.requestListBehavior.next(this.requestList);
+      .then(() => {
+        // notify user
+        this._snackBar.open(`Request for ${medicine_name} sent.`, '', {
+          duration: 3000
+        }); 
+
+        const req: RequestData = {
+          request_number: this.requestList.length, 
+          client_id,
+          medicine_id,
+          medicine_name
+        };
+      
+        this.requestList.push(req);
+        this.requestListBehavior.next(this.requestList);
     })
-    .catch(err => {
-      console.error(err);
-    });
+      .catch(err => {
+        // notify user
+        this._snackBar.open(`An error occurred.`, '', {
+          duration: 3000
+        });
+        console.error(err);
+      });
   }
 
 }

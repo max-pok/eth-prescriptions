@@ -15,7 +15,7 @@ export class Web3Service {
     this.checkAndInstantiateWeb3();
 
     this.web3.eth.getAccounts((err, acc) => {
-      if (!err && acc.length != 0) {
+      if (!err && acc.length !== 0) {
         this.currentAccount = acc[0];
       }
     });
