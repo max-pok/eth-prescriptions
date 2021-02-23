@@ -37,14 +37,6 @@ export class Web3Service {
     window.ethereum.on('accountsChanged', () => {
       location.reload();
     });
-
-    window.ethereum.on('connect', () => {
-      location.reload();
-    });
-
-    window.ethereum.on('disconnect', () => {
-      location.reload();
-    });
   }
 
   connect() {
