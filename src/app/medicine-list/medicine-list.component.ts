@@ -19,25 +19,22 @@ export class MedicineListComponent implements AfterViewInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  form: FormGroup;
+  form = new FormGroup({
+    id: new FormControl(),
+    name: new FormControl(),
+    brand_name: new FormControl(),
+    price: new FormControl(),
+  });
 
-  constructor(private medicineService: MedicineService) {
-    this.form = new FormGroup({
-      id: new FormControl(),
-      name: new FormControl(),
-      brand_name: new FormControl(),
-      price: new FormControl(),
-    });
+  constructor(private medicineService: MedicineService) {}
 
+  ngAfterViewInit() {
     this.medicineService.medicineListBehavior.subscribe((values) => {
       // Assign the data to the data source for the table to render
       this.dataSource = new MatTableDataSource(values);
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
     });
-  }
-
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
   }
 
   applyFilter(event: Event) {
@@ -60,8 +57,8 @@ export class MedicineListComponent implements AfterViewInit {
       // clear inputs
       this.form.reset();
       // reset errors
-      Object.keys(this.form.controls).forEach(key => {
-        this.form.get(key).setErrors(null) ;
+      Object.keys(this.form.controls).forEach((key) => {
+        this.form.get(key).setErrors(null);
       });
     }
   }

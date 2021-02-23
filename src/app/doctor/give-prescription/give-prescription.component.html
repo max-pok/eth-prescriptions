@@ -15,7 +15,23 @@
         <input matInput formControlName="medicine_id" required>
     </mat-form-field>
 
+    <mat-form-field class="full-width" appearance="outline">
+        <mat-label>Enter a date range</mat-label>
+        <mat-date-range-input [rangePicker]="picker">
+            <input matStartDate formControlName="start" placeholder="Start date" required>
+            <input matEndDate formControlName="end" placeholder="End date" required>
+        </mat-date-range-input>
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-date-range-picker #picker></mat-date-range-picker>
+    </mat-form-field>
+    
+    
     <div class="button-row">
         <button mat-raised-button color="primary" (click)="givePerscription()">Give Prescription</button>
     </div>
+    
+    <br>
+    
+    <mat-progress-bar *ngIf="true" class="full-width" mode="query"></mat-progress-bar>
+    
 </form>

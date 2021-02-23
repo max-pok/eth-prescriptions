@@ -10,28 +10,35 @@ import { Web3Service } from '../services/web3.service';
 @Component({
   selector: 'app-client',
   templateUrl: './client.component.html',
-  styleUrls: ['./client.component.css']
+  styleUrls: ['./client.component.css'],
 })
 export class ClientComponent implements AfterViewInit {
-
-  displayedColumns: string[] = ['client_id', 'medicine_id', 'medicine_name'];
+  displayedColumns: string[] = [
+    'client_id',
+    'medicine_id',
+    'medicine_name',
+    'from',
+    'to',
+  ];
   dataSource: MatTableDataSource<PerscriptionData>;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private perscriptionService: PrescriptionService, private web3: Web3Service) {
-    this.perscriptionService.perscriptionListtBehavior.subscribe(value => {
-      const filtered = value.filter(v => {
+  constructor(
+    private perscriptionService: PrescriptionService,
+    private web3: Web3Service
+  ) {}
+
+  ngAfterViewInit() {
+    this.perscriptionService.perscriptionListtBehavior.subscribe((value) => {
+      const filtered = value.filter((v) => {
         return this.web3.currentAccount === v.client_id;
       });
       this.dataSource = new MatTableDataSource(filtered);
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
     });
-  }
-
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
   }
 
   applyFilter(event: Event) {
@@ -42,5 +49,4 @@ export class ClientComponent implements AfterViewInit {
       this.dataSource.paginator.firstPage();
     }
   }
-
 }

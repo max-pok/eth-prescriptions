@@ -24,11 +24,15 @@
     <button
       mat-raised-button
       color="primary"
-      (click)="addMedicineToBlockChain()"
-    >
+      (click)="addMedicineToBlockChain()">
       Add
     </button>
   </div>
+
+  <br>
+
+    <mat-progress-bar *ngIf="true" class="full-width" mode="query"></mat-progress-bar>
+
 </form>
 
 <div class="divider">
@@ -74,13 +78,12 @@
           <button
             mat-mini-fab
             color="warn"
-            (click)="removeMedicineToBlockChain(i)"
-          >
+            (click)="removeMedicineToBlockChain(i)">
             <mat-icon>delete</mat-icon>
           </button>
         </td>
       </ng-container>
-
+      
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
 
@@ -93,6 +96,7 @@
     </table>
 
     <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+
   </div>
 </form>
 

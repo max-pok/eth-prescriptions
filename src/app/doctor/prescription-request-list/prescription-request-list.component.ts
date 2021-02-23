@@ -1,5 +1,5 @@
 import { RequestData } from './../../models/RequestData';
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ViewChild, OnInit } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -8,26 +8,30 @@ import { RequestService } from 'src/app/services/request.service';
 @Component({
   selector: 'prescription-request-list',
   templateUrl: './prescription-request-list.component.html',
-  styleUrls: ['./prescription-request-list.component.css']
+  styleUrls: ['./prescription-request-list.component.css'],
 })
 export class PrescriptionRequestListComponent implements AfterViewInit {
-  
-  displayedColumns: string[] = ['request_number', 'client_id', 'medicine_id', 'medicine_name', 'update'];
+  displayedColumns: string[] = [
+    'request_number',
+    'client_id',
+    'medicine_id',
+    'medicine_name',
+    'update',
+  ];
   dataSource: MatTableDataSource<RequestData>;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private requestService: RequestService) {
-    this.requestService.requestListBehavior.subscribe(requests => {      
-      // Assign the data to the data source for the table to render
-      this.dataSource = new MatTableDataSource(requests);
-    })
-  }
+  constructor(private requestService: RequestService) {}
 
   ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
+    this.requestService.requestListBehavior.subscribe((requests) => {
+      // Assign the data to the data source for the table to render
+      this.dataSource = new MatTableDataSource(requests);
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+    });
   }
 
   applyFilter(event: Event) {
@@ -40,11 +44,15 @@ export class PrescriptionRequestListComponent implements AfterViewInit {
   }
 
   accept(index: number, row: RequestData) {
-    this.requestService.acceptRequest(row.client_id, row.medicine_id, row.medicine_name, index);
+    this.requestService.acceptRequest(
+      row.client_id,
+      row.medicine_id,
+      row.medicine_name,
+      index
+    );
   }
-  
+
   decline(index: number) {
     this.requestService.declineRequest(index);
   }
-
 }

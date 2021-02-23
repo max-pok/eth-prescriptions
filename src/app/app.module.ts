@@ -27,6 +27,10 @@ import { PrescriptionService } from './services/prescription.service';
 import { RequestPerscriptionComponent } from './client/request-perscription/request-perscription.component';
 import { HomeComponent } from './home/home.component';
 import { MatCardModule } from '@angular/material/card';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @NgModule({
   declarations: [
@@ -38,7 +42,7 @@ import { MatCardModule } from '@angular/material/card';
     PrescriptionRequestListComponent,
     GivePrescriptionComponent,
     RequestPerscriptionComponent,
-    HomeComponent
+    HomeComponent,
   ],
   imports: [
     BrowserModule,
@@ -55,14 +59,18 @@ import { MatCardModule } from '@angular/material/card';
     MatDividerModule,
     MatFormFieldModule,
     MatSnackBarModule,
-    MatCardModule
+    MatCardModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatProgressBarModule,
+    MatProgressSpinnerModule,
   ],
   providers: [
     Web3Service,
     MedicineService,
     RequestService,
-    PrescriptionService
+    PrescriptionService,
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
