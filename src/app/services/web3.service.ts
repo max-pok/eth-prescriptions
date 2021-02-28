@@ -10,6 +10,7 @@ declare var window: any;
 export class Web3Service {
   public web3: Web3;
   public currentAccount;
+  public premittedAccounts: [];
 
   constructor() {
     this.checkAndInstantiateWeb3();

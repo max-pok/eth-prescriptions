@@ -71,7 +71,13 @@ export class PrescriptionService {
     expiry_date
   ) {
     this.requestContract.methods
-      .givePerscriptionWithoutIndex(client_id, medicine_name, medicine_id)
+      .givePerscriptionWithoutIndex(
+        client_id,
+        medicine_name,
+        medicine_id,
+        given_date,
+        expiry_date
+      )
       .send({
         from: this.web3Service.currentAccount,
         gasLimit: 3000000,
