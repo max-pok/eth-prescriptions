@@ -31,6 +31,8 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatDialogModule } from '@angular/material/dialog';
+import { GivePrescriptionDialogComponent } from './doctor/give-prescription-dialog/give-prescription-dialog.component';
 
 @NgModule({
   declarations: [
@@ -43,6 +45,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     GivePrescriptionComponent,
     RequestPerscriptionComponent,
     HomeComponent,
+    GivePrescriptionDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -64,6 +67,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     MatNativeDateModule,
     MatProgressBarModule,
     MatProgressSpinnerModule,
+    MatDialogModule,
   ],
   providers: [
     Web3Service,

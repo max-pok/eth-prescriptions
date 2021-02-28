@@ -1,4 +1,3 @@
-import { MedicineService } from './medicine.service';
 import { Injectable } from '@angular/core';
 import { Web3Service } from './web3.service';
 import * as client from '../../../build/contracts/ClientContract.json';
@@ -36,18 +35,19 @@ export class RequestService {
   getRequestsFromBlockChain() {
     this.requestContract.methods
       .requestCount()
-      .call()
+      .call({ from: this.web3Service.currentAccount })
       .then((counter) => {
         for (let i = 0; i < counter; i++) {
           this.requestContract.methods
             .getRequest(i)
-            .call()
+            .call({ from: this.web3Service.currentAccount })
             .then((value) => {
               const req: RequestData = {
                 request_number: Number(value[0]),
                 client_id: value[1],
                 medicine_id: value[2],
                 medicine_name: value[3],
+                request_date: value[4],
               };
               this.requestList.push(req);
               this.requestListBehavior.next(this.requestList);
@@ -60,13 +60,22 @@ export class RequestService {
       });
   }
 
-  acceptRequest(client_address, medicine_id, medicine_name, index: number) {
+  acceptRequest(
+    client_address,
+    medicine_id,
+    medicine_name,
+    index: number,
+    givenDate,
+    exipredDate
+  ) {
     this.requestContract.methods
       .givePerscriptionWithIndex(
         client_address,
         medicine_id,
         medicine_name,
-        index
+        index,
+        givenDate,
+        exipredDate
       )
       .send({
         from: this.web3Service.currentAccount,
@@ -119,13 +128,9 @@ export class RequestService {
       });
   }
 
-  requestPerscription(client_id, medicine_name, medicine_id) {
-    console.log(client_id);
-    console.log(medicine_name);
-    console.log(medicine_id);
-
+  requestPerscription(client_id, medicine_name, medicine_id, requestTime) {
     this.requestContract.methods
-      .requestPerscription(client_id, medicine_id, medicine_name)
+      .requestPerscription(client_id, medicine_id, medicine_name, requestTime)
       .send({
         from: client_id,
         gasLimit: 3000000,
@@ -142,6 +147,7 @@ export class RequestService {
           client_id,
           medicine_id,
           medicine_name,
+          request_date: requestTime,
         };
 
         this.requestList.push(req);

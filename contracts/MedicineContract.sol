@@ -9,26 +9,34 @@ contract MedicineContract {
         string _brandName;
         uint _price;
     }
-    
-    address owner;
-    
+        
     uint public medicineCount = 0;
     Medicine[] public medicines;
     
-    address[] private permitted = [address(0xe092b1fa25DF5786D151246E492Eed3d15EA4dAA)];
-
-    function onlyPermittedDoctor(address sender) public pure returns(bool){
-        if (sender != address(0xe092b1fa25DF5786D151246E492Eed3d15EA4dAA))
-                return false;
-        return true;
+    address[] private permitted;
+    address owner;
+    
+    function onlyPermittedDoctor(address sender) public view returns(bool){
+        for(uint i; i < permitted.length; i++){
+            if(sender == permitted[i]){
+                return true;
+            }
+        }
+        return false;
     }
 
-    modifier isDoctor(){
+    modifier isDoctor() {
         require(onlyPermittedDoctor(msg.sender), 'caller is not a doctor');
         _;
     }
-    
+
     constructor() public {
+        owner = msg.sender;
+        permitted.push(owner);
+    }
+    
+    function getPermittedList() public view returns(address[] memory) {
+        return permitted;
     }
     
     function addDrug(string memory _id, string memory _medicine, string memory _brandName, uint _price) public {

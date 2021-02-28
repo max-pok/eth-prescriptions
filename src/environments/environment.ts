@@ -5,8 +5,8 @@
 export const environment = {
   production: false,
   HttpProvider: 'http://localhost:8545',
-  MedicineContract: '0xaeb9888a2970BC7627AB4f42C3FbbB731aba08C4',
-  ClientContract: '0x1Fe7CCC92380fd8cFFB6819594f7200ca3108cd6',
+  MedicineContract: '0xc371880913b8b0F8D051A58fce5457C54EfC0e57',
+  ClientContract: '0x27F5e91336ba660038C6b86c74EA9d2B0FC04b0f',
   Deployer: '0xe092b1fa25DF5786D151246E492Eed3d15EA4dAA',
 };
 

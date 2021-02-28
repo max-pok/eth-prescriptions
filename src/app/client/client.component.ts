@@ -28,17 +28,18 @@ export class ClientComponent implements AfterViewInit {
   constructor(
     private perscriptionService: PrescriptionService,
     private web3: Web3Service
-  ) {}
-
-  ngAfterViewInit() {
+  ) {
     this.perscriptionService.perscriptionListtBehavior.subscribe((value) => {
       const filtered = value.filter((v) => {
         return this.web3.currentAccount === v.client_id;
       });
       this.dataSource = new MatTableDataSource(filtered);
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
     });
+  }
+
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
   }
 
   applyFilter(event: Event) {

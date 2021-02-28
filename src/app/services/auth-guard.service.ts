@@ -12,6 +12,8 @@ import { Web3Service } from './web3.service';
   providedIn: 'root',
 })
 export class AuthGuardService implements CanActivate {
+  premmited;
+
   constructor(private web3Service: Web3Service, private router: Router) {}
 
   canActivate(

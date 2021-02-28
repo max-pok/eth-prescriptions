@@ -25,15 +25,16 @@ export class RequestPerscriptionComponent implements AfterViewInit {
     private requestService: RequestService,
     private web3Service: Web3Service,
     private snackBar: MatSnackBar
-  ) {}
-
-  ngAfterViewInit() {
+  ) {
     this.medicineService.medicineListBehavior.subscribe((values) => {
       // Assign the data to the data source for the table to render
       this.dataSource = new MatTableDataSource(values);
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
     });
+  }
+
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
   }
 
   applyFilter(event: Event) {
@@ -49,7 +50,8 @@ export class RequestPerscriptionComponent implements AfterViewInit {
     this.requestService.requestPerscription(
       this.web3Service.currentAccount,
       row.name,
-      row.id
+      row.id,
+      new Date().getTime()
     );
   }
 }

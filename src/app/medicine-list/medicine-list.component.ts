@@ -26,15 +26,16 @@ export class MedicineListComponent implements AfterViewInit {
     price: new FormControl(),
   });
 
-  constructor(private medicineService: MedicineService) {}
-
-  ngAfterViewInit() {
+  constructor(private medicineService: MedicineService) {
     this.medicineService.medicineListBehavior.subscribe((values) => {
       // Assign the data to the data source for the table to render
       this.dataSource = new MatTableDataSource(values);
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
     });
+  }
+
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
   }
 
   applyFilter(event: Event) {

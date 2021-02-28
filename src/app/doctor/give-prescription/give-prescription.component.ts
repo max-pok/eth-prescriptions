@@ -1,5 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import {
+  MatDialog,
+  MatDialogRef,
+  MAT_DIALOG_DATA,
+} from '@angular/material/dialog';
 import { PrescriptionService } from 'src/app/services/prescription.service';
 
 @Component({
@@ -12,7 +17,7 @@ export class GivePrescriptionComponent implements OnInit {
     client_id: new FormControl(),
     medicine_name: new FormControl(),
     medicine_id: new FormControl(),
-    start: new FormControl(),
+    start: new FormControl(new Date()),
     end: new FormControl(),
   });
 
@@ -27,7 +32,9 @@ export class GivePrescriptionComponent implements OnInit {
       this.per.givePerscription(
         this.form.get('client_id').value,
         this.form.get('medicine_id').value,
-        this.form.get('medicine_name').value
+        this.form.get('medicine_name').value,
+        this.form.get('start').value.getTime(),
+        this.form.get('end').value.getTime()
       );
       // clear inputs
       this.form.reset();
